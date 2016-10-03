@@ -68,13 +68,29 @@ int main(void)
 
 
   GPIOA->MODER |= 1<<10; //output
-  //GPIOA->OTYPER |= 1<<5; // open drain
   GPIOA->OSPEEDR |= 3<<10;
   GPIOA->PUPDR |= 1<<10;
 
+  //GPIOA->OTYPER |= 1<<5; // open drain
   /* Infinite loop */
   while (1)
   {
+	  GPIOA->ODR |= 1<<5; //turn LED2 on
+
+	  GPIOA->ODR ^= 1<<5; // turn LED2 off
+
+	  GPIOA->BSRRL |= 1<<5; // turn LED2 on
+
+	  GPIOA->BSRRH |= 1<<5;  // turn LED2 off
+
+	  GPIOA->ODR ^= 1<<5; // toggle LED2
+
+	  GPIOA->ODR ^= 1<<5; // toggle LED2
+
+	  GPIOA->ODR ^= 1<<5; // toggle LED2
+
+	  GPIOA->ODR ^= 1<<5; // toggle LED2
+
 	i++;
   }
   return 0;
