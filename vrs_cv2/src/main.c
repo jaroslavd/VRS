@@ -70,7 +70,10 @@ int main(void)
   GPIOA->MODER |= 1<<10; //output
   GPIOA->OSPEEDR |= 3<<10;
   GPIOA->PUPDR |= 1<<10;
-
+  if(GPIOA->OTYPER == 1<<5)
+  {
+	  GPIOA->OTYPER ^= 1<<5;
+  }
   //GPIOA->OTYPER |= 1<<5; // open drain
   /* Infinite loop */
   while (1)
