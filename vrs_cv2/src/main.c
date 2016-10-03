@@ -65,17 +65,42 @@ int main(void)
 
 
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
 
-
+  //GPIOA
   GPIOA->MODER |= 1<<10; //output
   GPIOA->OSPEEDR |= 3<<10;
   GPIOA->PUPDR |= 1<<10;
   if(GPIOA->OTYPER == 1<<5)
   {
-	  GPIOA->OTYPER ^= 1<<5;
+	  GPIOA->OTYPER ^= 1<<5; // //output push-pull
   }
-  //GPIOA->OTYPER |= 1<<5; // open drain
-  /* Infinite loop */
+
+
+  //GPIOC
+  if(GPIOC->MODER == 1<<27) //INPUT
+  {
+	  GPIOC->MODER ^= 1<<27;
+  }
+  if(GPIOC->MODER == 1<<26)//INPUT
+  {
+	  GPIOC->MODER ^= 1<<26;
+  }
+
+  if(GPIOC->OTYPER == 1<<13)//push-pull
+  {
+	  GPIOC->OTYPER ^= 1<<13;
+  }
+
+  if(GPIOC->PUPDR == 1<<27) //NO PULL
+  {
+	  GPIOC->PUPDR ^= 1<<27;
+  }
+  if(GPIOC->PUPDR == 1<<26)//NO PULL
+  {
+	  GPIOC->PUPDR ^= 1<<26;
+  }
+
   while (1)
   {
 	  GPIOA->ODR |= 1<<5; //turn LED2 on
