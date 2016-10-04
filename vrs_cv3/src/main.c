@@ -67,6 +67,7 @@ int main(void)
 
 uint8_t BUTTON = 0;
 uint16_t blikanie = 0;
+uint16_t zatlacene_tlacidlo = 0;
 
   /* Infinite loop */
   while (1)
@@ -96,14 +97,24 @@ uint16_t blikanie = 0;
 	  {
 	  }
 	  GPIO_ToggleBits(GPIOA, GPIO_Pin_5); // ODR register*/
-	  if(BUTTON == 1)
+	  /*if(BUTTON == 1)
 	  {
 		  GPIO_SetBits(GPIOA, GPIO_Pin_5); //BSR register
 	  }
 	  else
 	  {
 		  GPIO_ResetBits(GPIOA, GPIO_Pin_5); // BSR register
-	  }
+	  }*/
+
+		if(BUTTON == 1)
+		{
+			zatlacene_tlacidlo++;
+			if(zatlacene_tlacidlo>50000)
+			{
+				GPIO_ToggleBits(GPIOA, GPIO_Pin_5); // toggle LED2
+				zatlacene_tlacidlo = 0;
+			}
+		}
 
 
 	i++;
