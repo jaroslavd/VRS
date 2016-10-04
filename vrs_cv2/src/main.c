@@ -125,6 +125,7 @@ int main(void)
 
   uint8_t BUTTON = 1;
   uint16_t blikanie = 0;
+  uint16_t zatlacene_tlacidlo = 0;
   while (1)
   {
 	  /*GPIOA->ODR |= 1<<5; //turn LED2 on
@@ -166,16 +167,24 @@ int main(void)
 	{
 	}*/
 
-	if(BUTTON == 0)
+	/*if(BUTTON == 0)
 	{
 		GPIOA->BSRRH |= 1<<5;  // turn LED2 off
 	}
 	else
 	{
 		GPIOA->BSRRL |= 1<<5; // turn LED2 on
+	}*/
+
+	if(BUTTON == 1)
+	{
+		zatlacene_tlacidlo++;
+		if(zatlacene_tlacidlo>50000)
+		{
+			GPIOA->ODR ^= 1<<5; // toggle LED2
+			zatlacene_tlacidlo = 0;
+		}
 	}
-
-
 
   }
   return 0;
