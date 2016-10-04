@@ -46,29 +46,27 @@ int main(void)
 {
   int i = 0;
 
-  /**
-  *  IMPORTANT NOTE!
-  *  See the <system_*.c> file and how/if the SystemInit() function updates 
-  *  SCB->VTOR register. Sometimes the symbol VECT_TAB_SRAM needs to be defined 
-  *  when building the project if code has been located to RAM and interrupts 
-  *  are used. Otherwise the interrupt table located in flash will be used.
-  *  E.g.  SCB->VTOR = 0x20000000;  
-  */
+  GPIO_InitTypeDef        GPIO_InitStructure;
 
-  /**
-  *  At this stage the microcontroller clock setting is already configured,
-  *  this is done through SystemInit() function which is called from startup
-  *  file (startup_stm32l1xx_hd.s) before to branch to application main.
-  *  To reconfigure the default setting of SystemInit() function, refer to
-  *  system_stm32l1xx.c file
-  */
+  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
 
-  /* TODO - Add your application code here */
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_40MHz;
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+  GPIO_Init(GPIOA, &GPIO_InitStructure);
+
 
 
   /* Infinite loop */
   while (1)
   {
+	  GPIO_SetBits(GPIOA, GPIO_Pin_5); //BSR register
+
+	  GPIO_ResetBits(GPIOA, GPIO_Pin_5); // BSR register
+
+	  GPIO_ToggleBits(GPIOA, GPIO_Pin_5); // ODR register
 	i++;
   }
   return 0;
