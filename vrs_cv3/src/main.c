@@ -63,96 +63,13 @@ int main(void)
   *  system_stm32l1xx.c file
   */
 
-
-  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
-  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
-
-  //GPIOA
-  GPIOA->MODER |= 1<<10; //output
-  GPIOA->OSPEEDR |= 3<<10;
-  GPIOA->PUPDR |= 1<<10;
-  if(GPIOA->OTYPER == 1<<5)
-  {
-	  GPIOA->OTYPER ^= 1<<5; // //output push-pull
-  }
+  /* TODO - Add your application code here */
 
 
-  //GPIOC
-  /*if(GPIOC->MODER == 1<<27) //INPUT
-  {
-	  GPIOC->MODER ^= 1<<27;
-  }
-  if(GPIOC->MODER == 1<<26)//INPUT
-  {
-	  GPIOC->MODER ^= 1<<26;
-  }
-
-  if(GPIOC->OTYPER == 1<<13)//push-pull
-  {
-	  GPIOC->OTYPER ^= 1<<13;
-  }
-
-  if(GPIOC->PUPDR == 1<<27) //NO PULL
-  {
-	  GPIOC->PUPDR ^= 1<<27;
-  }
-  if(GPIOC->PUPDR == 1<<26)//NO PULL
-  {
-	  GPIOC->PUPDR ^= 1<<26;
-  }*/
-    if((GPIOC->MODER & 1<<27) == 1) //INPUT
-    {
-  	  GPIOC->MODER ^= 1<<27;
-    }
-    if((GPIOC->MODER & 1<<26) == 1)//INPUT
-    {
-  	  GPIOC->MODER ^= 1<<26;
-    }
-
-    if((GPIOC->OTYPER & 1<<13) == 1)//push-pull
-    {
-  	  GPIOC->OTYPER ^= 1<<13;
-    }
-
-    if((GPIOC->PUPDR & 1<<27) == 1) //NO PULL
-    {
-  	  GPIOC->PUPDR ^= 1<<27;
-    }
-    if((GPIOC->PUPDR & 1<<26) == 1)//NO PULL
-    {
-  	  GPIOC->PUPDR ^= 1<<26;
-    }
-
-  uint8_t BUTTON = 1;
+  /* Infinite loop */
   while (1)
   {
-	  GPIOA->ODR |= 1<<5; //turn LED2 on
-
-	  GPIOA->ODR ^= 1<<5; // turn LED2 off
-
-	  GPIOA->BSRRL |= 1<<5; // turn LED2 on
-
-	  GPIOA->BSRRH |= 1<<5;  // turn LED2 off
-
-	  GPIOA->ODR ^= 1<<5; // toggle LED2
-
-	  GPIOA->ODR ^= 1<<5; // toggle LED2
-
-	  GPIOA->ODR ^= 1<<5; // toggle LED2
-
-	  GPIOA->ODR ^= 1<<5; // toggle LED2
-
 	i++;
-
-
-	if ((GPIOC->IDR & 1<<13) != 0)
-	  {
-			BUTTON = 0;
-	  }
-  else
-	  {
-	  	  BUTTON = 1;
-	  }
   }
   return 0;
 }
