@@ -127,7 +127,7 @@ int main(void)
   uint16_t blikanie = 0;
   while (1)
   {
-	  GPIOA->ODR |= 1<<5; //turn LED2 on
+	  /*GPIOA->ODR |= 1<<5; //turn LED2 on
 
 	  GPIOA->ODR ^= 1<<5; // turn LED2 off
 
@@ -144,7 +144,7 @@ int main(void)
 	  GPIOA->ODR ^= 1<<5; // toggle LED2
 
 	i++;
-
+*/
 
 	if ((GPIOC->IDR & 1<<13) != 0)
 	  {
@@ -154,8 +154,9 @@ int main(void)
 	  {
 	  	  BUTTON = 1;
 	  }
+
 	//Uloha 3
-	GPIOA->ODR ^= 1<<5; // toggle LED2
+	/*GPIOA->ODR ^= 1<<5; // toggle LED2
 	for(blikanie=0;blikanie<50000;blikanie++)
 	{
 	}
@@ -163,7 +164,18 @@ int main(void)
 
 	for(blikanie=0;blikanie<50000;blikanie++)
 	{
+	}*/
+
+	if(BUTTON == 0)
+	{
+		GPIOA->BSRRH |= 1<<5;  // turn LED2 off
 	}
+	else
+	{
+		GPIOA->BSRRL |= 1<<5; // turn LED2 on
+	}
+
+
 
   }
   return 0;
