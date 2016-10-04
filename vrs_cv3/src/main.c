@@ -47,7 +47,7 @@ int main(void)
   int i = 0;
 
   GPIO_InitTypeDef        GPIO_InitStructure;
-
+//uloha 1
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
 
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
@@ -56,17 +56,34 @@ int main(void)
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_40MHz;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
   GPIO_Init(GPIOA, &GPIO_InitStructure);
+//uloha2
+  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
 
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_13;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
+  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+  GPIO_Init(GPIOC, &GPIO_InitStructure);
 
+uint8_t BUTTON = 0;
 
   /* Infinite loop */
   while (1)
   {
-	  GPIO_SetBits(GPIOA, GPIO_Pin_5); //BSR register
+	  /*GPIO_SetBits(GPIOA, GPIO_Pin_5); //BSR register
 
 	  GPIO_ResetBits(GPIOA, GPIO_Pin_5); // BSR register
 
-	  GPIO_ToggleBits(GPIOA, GPIO_Pin_5); // ODR register
+	  GPIO_ToggleBits(GPIOA, GPIO_Pin_5); // ODR register*/
+
+	  if(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13) != 0)
+	  {
+		  BUTTON = 0;
+	  }
+	  else
+	  {
+		  BUTTON = 1;
+	  }
 	i++;
   }
   return 0;
