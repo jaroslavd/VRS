@@ -66,6 +66,7 @@ int main(void)
   GPIO_Init(GPIOC, &GPIO_InitStructure);
 
 uint8_t BUTTON = 0;
+uint16_t blikanie = 0;
 
   /* Infinite loop */
   while (1)
@@ -74,8 +75,9 @@ uint8_t BUTTON = 0;
 
 	  GPIO_ResetBits(GPIOA, GPIO_Pin_5); // BSR register
 
-	  GPIO_ToggleBits(GPIOA, GPIO_Pin_5); // ODR register*/
-
+	  GPIO_ToggleBits(GPIOA, GPIO_Pin_5); // ODR register
+*/
+	  /*
 	  if(GPIO_ReadInputDataBit(GPIOC, GPIO_Pin_13) != 0)
 	  {
 		  BUTTON = 0;
@@ -84,6 +86,17 @@ uint8_t BUTTON = 0;
 	  {
 		  BUTTON = 1;
 	  }
+	  */
+
+	  for(blikanie=0;blikanie<50000;blikanie++)
+	  {
+	  }
+	  GPIO_ToggleBits(GPIOA, GPIO_Pin_5); // ODR register
+	  for(blikanie=0;blikanie<50000;blikanie++)
+	  {
+	  }
+	  GPIO_ToggleBits(GPIOA, GPIO_Pin_5); // ODR register
+
 	i++;
   }
   return 0;
