@@ -124,6 +124,7 @@ int main(void)
     }
 
   uint8_t BUTTON = 1;
+  uint16_t blikanie = 0;
   while (1)
   {
 	  GPIOA->ODR |= 1<<5; //turn LED2 on
@@ -153,6 +154,17 @@ int main(void)
 	  {
 	  	  BUTTON = 1;
 	  }
+	//Uloha 3
+	GPIOA->ODR ^= 1<<5; // toggle LED2
+	for(blikanie=0;blikanie<50000;blikanie++)
+	{
+	}
+	GPIOA->ODR ^= 1<<5; // toggle LED2
+
+	for(blikanie=0;blikanie<50000;blikanie++)
+	{
+	}
+
   }
   return 0;
 }
