@@ -109,11 +109,15 @@ uint16_t zatlacene_tlacidlo = 0;
 		if(BUTTON == 1)
 		{
 			zatlacene_tlacidlo++;
-			if(zatlacene_tlacidlo>50000)
+			if(zatlacene_tlacidlo == 1000)
 			{
 				GPIO_ToggleBits(GPIOA, GPIO_Pin_5); // toggle LED2
-				zatlacene_tlacidlo = 0;
+
 			}
+		}
+		else
+		{
+			zatlacene_tlacidlo = 0;
 		}
 
 

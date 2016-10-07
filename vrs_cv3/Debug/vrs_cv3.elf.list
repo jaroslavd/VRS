@@ -713,26 +713,30 @@ uint16_t zatlacene_tlacidlo = 0;
 		if(BUTTON == 1)
  8000432:	7cfb      	ldrb	r3, [r7, #19]
  8000434:	2b01      	cmp	r3, #1
- 8000436:	d10d      	bne.n	8000454 <main+0x9c>
+ 8000436:	d10b      	bne.n	8000450 <main+0x98>
 		{
 			zatlacene_tlacidlo++;
  8000438:	8a3b      	ldrh	r3, [r7, #16]
  800043a:	3301      	adds	r3, #1
  800043c:	823b      	strh	r3, [r7, #16]
-			if(zatlacene_tlacidlo>50000)
- 800043e:	8a3a      	ldrh	r2, [r7, #16]
- 8000440:	f24c 3350 	movw	r3, #50000	; 0xc350
- 8000444:	429a      	cmp	r2, r3
- 8000446:	d905      	bls.n	8000454 <main+0x9c>
+			if(zatlacene_tlacidlo == 1000)
+ 800043e:	8a3b      	ldrh	r3, [r7, #16]
+ 8000440:	f5b3 7f7a 	cmp.w	r3, #1000	; 0x3e8
+ 8000444:	d106      	bne.n	8000454 <main+0x9c>
 			{
 				GPIO_ToggleBits(GPIOA, GPIO_Pin_5); // toggle LED2
- 8000448:	4804      	ldr	r0, [pc, #16]	; (800045c <main+0xa4>)
- 800044a:	2120      	movs	r1, #32
- 800044c:	f000 f8d8 	bl	8000600 <GPIO_ToggleBits>
-				zatlacene_tlacidlo = 0;
+ 8000446:	4805      	ldr	r0, [pc, #20]	; (800045c <main+0xa4>)
+ 8000448:	2120      	movs	r1, #32
+ 800044a:	f000 f8d9 	bl	8000600 <GPIO_ToggleBits>
+ 800044e:	e001      	b.n	8000454 <main+0x9c>
+
+			}
+		}
+		else
+		{
+			zatlacene_tlacidlo = 0;
  8000450:	2300      	movs	r3, #0
  8000452:	823b      	strh	r3, [r7, #16]
-			}
 		}
 
 

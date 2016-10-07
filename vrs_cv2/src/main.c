@@ -179,11 +179,15 @@ int main(void)
 	if(BUTTON == 1)
 	{
 		zatlacene_tlacidlo++;
-		if(zatlacene_tlacidlo>50000)
+		if(zatlacene_tlacidlo == 1000)
 		{
 			GPIOA->ODR ^= 1<<5; // toggle LED2
-			zatlacene_tlacidlo = 0;
+
 		}
+	}
+	else
+	{
+		zatlacene_tlacidlo = 0;
 	}
 
   }

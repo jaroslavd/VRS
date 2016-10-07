@@ -1957,12 +1957,12 @@ OUTPUT(vrs_cv2.elf elf32-littlearm)
  .debug_ranges  0x00000090       0x20 src\main.o
  .debug_ranges  0x000000b0      0x138 Libraries\STM32L1xx_StdPeriph_Driver\src\stm32l1xx_rcc.o
 
-.debug_line     0x00000000      0xb3e
+.debug_line     0x00000000      0xb41
  .debug_line    0x00000000      0x20d src\system_stm32l1xx.o
  .debug_line    0x0000020d      0x1e2 src\stm32l1xx_it.o
  .debug_line    0x000003ef       0x7c src\startup_stm32l1xx_hd.o
- .debug_line    0x0000046b      0x1c8 src\main.o
- .debug_line    0x00000633      0x50b Libraries\STM32L1xx_StdPeriph_Driver\src\stm32l1xx_rcc.o
+ .debug_line    0x0000046b      0x1cb src\main.o
+ .debug_line    0x00000636      0x50b Libraries\STM32L1xx_StdPeriph_Driver\src\stm32l1xx_rcc.o
 
 .debug_str      0x00000000      0x915
  .debug_str     0x00000000      0x30a src\system_stm32l1xx.o

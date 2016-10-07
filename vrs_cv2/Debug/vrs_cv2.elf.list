@@ -25,11 +25,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY, DEBUGGING
  10 .debug_ranges 000001e8  00000000  00000000  0000a038  2**3
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_line   00000b3e  00000000  00000000  0000a220  2**0
+ 11 .debug_line   00000b41  00000000  00000000  0000a220  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_str    00000915  00000000  00000000  0000ad5e  2**0
+ 12 .debug_str    00000915  00000000  00000000  0000ad61  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .comment      00000082  00000000  00000000  0000b673  2**0
+ 13 .comment      00000082  00000000  00000000  0000b676  2**0
                   CONTENTS, READONLY
  14 .debug_frame  00000614  00000000  00000000  0000b6f8  2**2
                   CONTENTS, READONLY, DEBUGGING
@@ -747,30 +747,40 @@ int main(void)
 	if(BUTTON == 1)
  8000448:	7bfb      	ldrb	r3, [r7, #15]
  800044a:	2b01      	cmp	r3, #1
- 800044c:	d112      	bne.n	8000474 <main+0xbc>
+ 800044c:	d10f      	bne.n	800046e <main+0xb6>
 	{
 		zatlacene_tlacidlo++;
  800044e:	89bb      	ldrh	r3, [r7, #12]
  8000450:	3301      	adds	r3, #1
  8000452:	81bb      	strh	r3, [r7, #12]
-		if(zatlacene_tlacidlo>50000)
- 8000454:	89ba      	ldrh	r2, [r7, #12]
- 8000456:	f24c 3350 	movw	r3, #50000	; 0xc350
- 800045a:	429a      	cmp	r2, r3
- 800045c:	d90a      	bls.n	8000474 <main+0xbc>
+		if(zatlacene_tlacidlo == 1000)
+ 8000454:	89bb      	ldrh	r3, [r7, #12]
+ 8000456:	f5b3 7f7a 	cmp.w	r3, #1000	; 0x3e8
+ 800045a:	d10b      	bne.n	8000474 <main+0xbc>
 		{
 			GPIOA->ODR ^= 1<<5; // toggle LED2
- 800045e:	4b06      	ldr	r3, [pc, #24]	; (8000478 <main+0xc0>)
- 8000460:	4a05      	ldr	r2, [pc, #20]	; (8000478 <main+0xc0>)
- 8000462:	8a92      	ldrh	r2, [r2, #20]
- 8000464:	b292      	uxth	r2, r2
- 8000466:	f082 0220 	eor.w	r2, r2, #32
- 800046a:	b292      	uxth	r2, r2
- 800046c:	829a      	strh	r2, [r3, #20]
-			zatlacene_tlacidlo = 0;
+ 800045c:	4b06      	ldr	r3, [pc, #24]	; (8000478 <main+0xc0>)
+ 800045e:	4a06      	ldr	r2, [pc, #24]	; (8000478 <main+0xc0>)
+ 8000460:	8a92      	ldrh	r2, [r2, #20]
+ 8000462:	b292      	uxth	r2, r2
+ 8000464:	f082 0220 	eor.w	r2, r2, #32
+ 8000468:	b292      	uxth	r2, r2
+ 800046a:	829a      	strh	r2, [r3, #20]
+	else
+	{
+		zatlacene_tlacidlo = 0;
+	}
+
+  }
+ 800046c:	e7e0      	b.n	8000430 <main+0x78>
+
+		}
+	}
+	else
+	{
+		zatlacene_tlacidlo = 0;
  800046e:	2300      	movs	r3, #0
  8000470:	81bb      	strh	r3, [r7, #12]
-		}
 	}
 
   }
