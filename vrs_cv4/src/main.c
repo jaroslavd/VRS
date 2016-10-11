@@ -25,8 +25,12 @@
 /* Includes */
 #include <stddef.h>
 #include "stm32l1xx.h"
+#include "main.h"
 
 void adc_init(void);
+static __IO uint32_t TimingDelay;
+
+RCC_ClocksTypeDef RCC_Clocks;
 
 /* Private typedef */
 /* Private define  */
@@ -46,6 +50,9 @@ void adc_init(void);
 int main(void)
 {
   int i = 0;
+  /* SysTick end of count event each 1ms */
+  RCC_GetClocksFreq(&RCC_Clocks);
+  SysTick_Config(RCC_Clocks.HCLK_Frequency / 1000);
 
   /**
   *  IMPORTANT NOTE!
@@ -64,7 +71,17 @@ int main(void)
   *  system_stm32l1xx.c file
   */
 
-  /* TODO - Add your application code here */
+  GPIO_InitTypeDef        GPIO_InitStructure;
+
+  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_5;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_40MHz;
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+  GPIO_Init(GPIOA, &GPIO_InitStructure);
+
   uint16_t AD_value = 0;
 
 
@@ -78,6 +95,25 @@ int main(void)
 	  ADC_SoftwareStartConv(ADC1);
 	  while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC)){}
 	  AD_value=ADC_GetConversionValue(ADC1);
+	  if(AD_value>3800) // niè
+	  {
+		  Delay(1000);
+	  }else if(AD_value>3500) //tlaèidlo 4
+	  {
+		  Delay(650);
+	  }else if(AD_value>3200) // tlaèidlo 3
+	  {
+		  Delay(450);
+	  }else if(AD_value>2800) //tlaèidlo 2
+	  {
+		  Delay(250);
+	  }else if(AD_value>0) //tlaèidlo 1
+	  {
+		  Delay(50);
+
+	  }
+	  Delay(1000);
+	  GPIO_ToggleBits(GPIOA, GPIO_Pin_5);
 	  i++;
   }
   return 0;
@@ -157,4 +193,24 @@ void adc_init(void)
 	}
 	/* Start ADC Software Conversion */
 	ADC_SoftwareStartConv(ADC1);
+}
+
+void Delay(__IO uint32_t nTime)
+{
+  TimingDelay = nTime;
+
+  while(TimingDelay != 0);
+}
+
+/**
+* @brief  Decrements the TimingDelay variable.
+* @param  None
+* @retval None
+*/
+void TimingDelay_Decrement(void)
+{
+  if (TimingDelay != 0x00)
+  {
+    TimingDelay--;
+  }
 }
