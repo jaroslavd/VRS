@@ -7,43 +7,36 @@
 
 #include "vrs_cv5.h"
 #include "stm32l1xx.h"
+#include "stdio.h"
 
-int i = 0;
+int i,j = 0;
+char data_to_send[7] = "";
+uint16_t received_data = 0;
+uint16_t ADC1_value = 0;
+float voltage = 0;
+uint8_t sending_format = 0;
 
 void ADC1_IRQHandler(void)
 {
-
-
-	uint16_t value = 0;
 	if(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) != RESET)
 	{
-		value = ADC_GetConversionValue(ADC1);
-		//ADC_ClearITPendingBit(ADC1, ADC_IT_EOC);
+		ADC1_value = ADC_GetConversionValue(ADC1);
 		ADC_ClearFlag(ADC1, ADC_FLAG_EOC);
-		i++;
-	  	if(i>5000){
-	  		char pismeno = 'a';
-	  		USART_ClearFlag(USART1, USART_FLAG_TC);
-	  		USART_SendData(USART1, (uint8_t)pismeno);
-	  		i=0;
-
-	  	}
-
-
+		send_data();
 	}
 }
 
 void USART1_IRQHandler(void)
 {
-	/*if(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) != RESET)
+	if(USART_GetFlagStatus(USART1, USART_FLAG_RXNE) != RESET)
 	{
 		USART_ClearFlag(USART1, USART_FLAG_RXNE);
-	}*/
-	uint16_t pom = 0;
-	if(USART_GetITStatus(USART1, USART_IT_RXNE) != RESET)
-	{
-        USART_ClearITPendingBit(USART1, USART_IT_RXNE);
-        pom = USART_ReceiveData(USART1);
+		received_data = USART_ReceiveData(USART1);
+
+        if(received_data == (uint16_t)'m')
+        {
+        	sending_format^=1;
+        }
 	}
 }
 
@@ -144,3 +137,27 @@ void adc_init(void)
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
 	NVIC_Init(&NVIC_InitStructure);
 }
+
+void send_data(void)
+{
+	i++;
+	if(i>5000){
+		USART_ClearFlag(USART1, USART_FLAG_TC);
+		if(sending_format)
+		{
+			sprintf(data_to_send,"%d\r\n",ADC1_value );
+		}
+		else
+		{
+			voltage = ADC1_value/4095.0*3.3;
+			sprintf(data_to_send,"%.2fV\r\n",voltage);
+		}
+		for(j=0;j<7;j++)
+		{
+			USART_SendData(USART1, (uint8_t)data_to_send[j]);
+			while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
+		}
+		i=0;
+	}
+}
+
