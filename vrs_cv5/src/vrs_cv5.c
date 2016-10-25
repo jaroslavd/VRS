@@ -9,8 +9,9 @@
 #include "stm32l1xx.h"
 #include "stdio.h"
 
-int i,j = 0;
-char data_to_send[7] = "";
+int i = 0;
+int j = 7;
+char Buffer_Data_to_send[7] = "";
 uint16_t received_data = 0;
 uint16_t ADC1_value = 0;
 float voltage = 0;
@@ -22,7 +23,7 @@ void ADC1_IRQHandler(void)
 	{
 		ADC1_value = ADC_GetConversionValue(ADC1);
 		ADC_ClearFlag(ADC1, ADC_FLAG_EOC);
-		send_data();
+
 	}
 }
 
@@ -37,6 +38,13 @@ void USART1_IRQHandler(void)
         {
         	sending_format^=1;
         }
+	}
+
+	if((USART_GetFlagStatus(USART1, USART_FLAG_TC) != RESET) )
+	{
+		send_data();
+
+		USART_ClearFlag(USART1, USART_FLAG_TC);
 	}
 }
 
@@ -82,7 +90,8 @@ void UART1_init(void)
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
   //choosing which event should cause interrupt
-  USART_ITConfig(USART1, USART_IT_RXNE, ENABLE);
+
+  USART_ITConfig(USART1, USART_IT_RXNE | USART_IT_TC, ENABLE);
   /* Enable USART */
   USART_Cmd(USART1, ENABLE);
 }
@@ -131,7 +140,7 @@ void adc_init(void)
 
 	NVIC_InitTypeDef NVIC_InitStructure;
 	NVIC_PriorityGroupConfig(NVIC_PriorityGroup_4);
-	NVIC_InitStructure.NVIC_IRQChannel = ADC1_IRQn; //zoznam prerušení nájdete v súbore stm32l1xx.h
+	NVIC_InitStructure.NVIC_IRQChannel = ADC1_IRQn;
 	NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 15;
 	NVIC_InitStructure.NVIC_IRQChannelSubPriority = 0;
 	NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
@@ -140,24 +149,39 @@ void adc_init(void)
 
 void send_data(void)
 {
-	i++;
-	if(i>5000){
-		USART_ClearFlag(USART1, USART_FLAG_TC);
 		if(sending_format)
 		{
-			sprintf(data_to_send,"%d\r\n",ADC1_value );
+			if(j>=6)
+			{
+				//buffer with data was sent
+				fill_buffer();
+				j=0;
+			}
 		}
 		else
 		{
-			voltage = ADC1_value/4095.0*3.3;
-			sprintf(data_to_send,"%.2fV\r\n",voltage);
+			if(j>=7)
+			{
+				//buffer with data was sent
+				fill_buffer();
+				j=0;
+			}
 		}
-		for(j=0;j<7;j++)
-		{
-			USART_SendData(USART1, (uint8_t)data_to_send[j]);
-			while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET);
-		}
-		i=0;
-	}
+		USART_SendData(USART1, (uint8_t)Buffer_Data_to_send[j]);
+
+		j+=1;
+
 }
 
+void fill_buffer(void)
+{
+	if(sending_format)
+	{
+		sprintf(Buffer_Data_to_send,"%d\r\n",ADC1_value );
+	}
+	else
+	{
+		voltage = ADC1_value/4095.0*3.3;
+		sprintf(Buffer_Data_to_send,"%.2fV\r\n",voltage);
+	}
+}

@@ -77,6 +77,7 @@ int main(void)
 
   uint16_t AD_value = 0;
 
+
   UART1_init();
 
   adc_init();

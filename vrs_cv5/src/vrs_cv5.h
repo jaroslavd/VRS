@@ -13,5 +13,6 @@ void UART1_init(void);
 void USART1_IRQHandler(void);
 void ADC1_IRQHandler(void);
 void send_data(void);
+void fill_buffer(void);
 
 #endif /* VRS_CV5_H_ */
